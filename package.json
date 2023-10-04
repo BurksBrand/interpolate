@@ -2,14 +2,16 @@
   "name": "interpolator",
   "version": "1.0.0",
   "description": "",
-  "main": "src/main.ts",
+  "main": "dist/main.js",
+  "types": "typings/main.d.ts",
   "scripts": {
     "start": "ts-node ./src/main.ts",
     "transpile": "babel --extensions .ts ./src --out-dir ./dist",
+    "build": "tsc",
     "test":"npx jest"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Carl Burks",
+  "license": "AGPLv3",
   "devDependencies": {
     "@babel/core": "^7.23.0",
     "@babel/preset-env": "^7.22.20",

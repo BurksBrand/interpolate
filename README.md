@@ -37,6 +37,7 @@ Foo <name> is <age>
 ```
 
 Sample Output:
+```
 redbob is 23
 bluebob is 23
 greenbob is 23
@@ -59,3 +60,4 @@ red dog
 blue dog
 green dog
 <defaulthandlershouldfire>
+```
