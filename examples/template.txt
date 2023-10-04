@@ -1,0 +1,8 @@
+<split:file:./examples/colors.txt><name> is <age>
+<name> is <age>
+Foo <name> is <age>
+<split:john:sam:joe><name> is <age>
+<range:24:30> wizards
+<range:24:30:5> wizards
+<color> dog
+<defaulthandlershouldfire>

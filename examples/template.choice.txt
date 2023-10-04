@@ -1,0 +1,3 @@
+<choose:file:./examples/colors.txt>
+<choose:>
+<choose:dog:cat>

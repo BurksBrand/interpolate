@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+      "target": "ESNext",             // Set your target ECMAScript version
+      "module": "CommonJS",           // Use CommonJS module system
+      "strict": true,                 // Enable strict type checking
+      "esModuleInterop": true,        // Allow importing CommonJS modules as ES6 modules
+      "skipLibCheck": true,           // Skip type checking of declaration files
+      "forceConsistentCasingInFileNames": true, // Enforce consistent file casing
+      "outDir": "./dist",             // Output directory for compiled JavaScript files
+      "rootDir": "./src",             // Root directory of your TypeScript source files
+      "declaration": true,            // Generate declaration files (.d.ts)
+      "sourceMap": true,              // Generate source maps for debugging
+      "resolveJsonModule": true,      // Enable importing JSON files as modules
+      "baseUrl": "./",                // Base URL for module resolution
+      "paths": {
+        "*": ["src/*"]                // Path mapping for custom module resolution
+      }
+    },
+    "include": ["src/**/*.ts"],       // Specify which files to include in compilation
+    "exclude": ["node_modules"]       // Specify which files to exclude from compilation
+  }
+  
