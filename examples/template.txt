@@ -1,4 +1,4 @@
-<split:file:./examples/colors.txt><name> is <age>
+<split:file:./examples/colors.txt><bogus><name> is <age>
 <name> is <age>
 Foo <name> is <age>
 <split:john:sam:joe><name> is <age>

@@ -1,6 +1,8 @@
+import { InterpolatorPlugin } from "typings";
+
 const delimiter = ":";
 const getSplit = ()=>{
-    const result = async function* interpolate(token:string) {
+    const result: InterpolatorPlugin = async function* interpolate(token:string) {
         if(token.startsWith("range:")){
             const pieces = token.slice(6).split(delimiter);
             if(pieces.length===2){

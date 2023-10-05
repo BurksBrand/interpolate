@@ -1,11 +1,6 @@
-(token:string)=>`<${token}>`
-
 const getDefaultInterpolator = (startSymbol:string, endSymbol:string)=>{
-    const result = function* interpolate(token:string) {
-        //console.log("default was called",token);
+    const result = function* interpolate(token: string) {
         yield `${startSymbol}${token}${endSymbol}`;
-        //yield token;
-
     }
     return result;
 }

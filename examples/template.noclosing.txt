@@ -1,1 +1,2 @@
 <color dog
+<color log <name>

@@ -2,7 +2,7 @@ import {promises as fs} from 'fs';
 import * as path from 'path';
 
 async function dynamicLoad(interpolatorFolder:string, extension:string) {
-  // const interpolatorFolder = './interpolators'; // Adjust the folder path as needed
+  // const interpolatorFolder = './interpolators'; 
   const modules: {default:any}[] = [];
 
   try {

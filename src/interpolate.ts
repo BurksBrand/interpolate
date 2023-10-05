@@ -2,15 +2,9 @@ import interpolator from './interpolator';
 import coalesceYielders from './coalesceYielders';
 import getDictionaryInterpolator from './getDictionaryInterpolator';
 import getDefaultInterpolator from './getDefaultInterpolator';
+import { InterpolateOptions } from 'typings';
 
 export type plugin =()=>(key:string)=>string;
-export interface InterpolateOptions{
-    dictionary?: {[key:string]:string},
-    template?:string[]
-    plugins?:plugin[],
-    startToken?:string
-    endToken?:string
-}
 
 const getInterpolate = async ({
         dictionary={},
@@ -30,7 +24,6 @@ const getInterpolate = async ({
                 yield item;
             }// token in dictionary ? dictionary[token] : handlers();
         }
-
         for(let result of template.filter(x=>x).flatMap(async (line:string)=> await interpolator(line,fullInterpolate as any /* we have a default return so it is okay */,startToken,endToken))){
             const r = await result;
             for await (let result2 of r){

@@ -2,14 +2,19 @@ import {promises as fs} from 'fs';
 import * as path from 'path';
 import dynamicLoader from './dynamicLoader';
 import getInterpolate from './interpolate';
+import { FileInterpolateOptions, InterpolateOptions } from './typings';
 
-export interface FileInterpolateOptions {
-    templateFileToRead: string,
-    dictionaryFileToRead: string,
-    startToken?: string,
-    endToken?: string
-}
-const main = async ({templateFileToRead,dictionaryFileToRead, startToken="<", endToken=">"}:FileInterpolateOptions):Promise<()=>AsyncGenerator<string>>=>{
+export {InterpolatorPlugin} from './typings';
+export {default as getChoose} from './interpolators/getChoose';
+export {default as getRange} from './interpolators/getRange';
+export {default as getSplit} from './interpolators/getSplit';
+export {default as coalesceYields} from './coalesceYielders';
+export {default as dynamicLoader} from './dynamicLoader';
+export {default as getDefaultInterpolator} from './getDefaultInterpolator';
+export {default as getDictionaryInterpolator} from './getDictionaryInterpolator';
+export {default as interpolator} from './interpolator'; 
+
+export const interpolateFromFiles = async ({templateFileToRead,dictionaryFileToRead, startToken="<", endToken=">"}:FileInterpolateOptions):Promise<()=>AsyncGenerator<string>>=>{
     let ext = ".js";
     if(__filename.indexOf(".ts")>-1){
         ext = ".ts";
@@ -18,10 +23,14 @@ const main = async ({templateFileToRead,dictionaryFileToRead, startToken="<", en
     const pieces =await Promise.all([...[templateFileToRead,dictionaryFileToRead].map((fileName)=>fs.readFile(fileName, 'utf8')),...(await dynamicLoader(path.join(__dirname,"./interpolators/"),ext))]);
     let [template,dictionaryToParse,...plugins]:any = pieces;
     const dictionary = JSON.parse(dictionaryToParse);
-    return await getInterpolate({dictionary,template:template.split("\r\n"),plugins, startToken,endToken});
+    return interpolate({dictionary,template:(template as string).split("\r\n"),plugins:plugins,startToken,endToken})
+
+}
+export const interpolate = async (options:InterpolateOptions):Promise<()=>AsyncGenerator<string>>=>{
+    return await getInterpolate(options);
 }
 
-if (require.main === module) {
+export const interpolateFromCLI = async()=>{
     // Check if a command-line argument (a file path) was provided
     // const IS_TS = process.argv[1].indexOf(".ts")
     let argOffset = 1
@@ -38,10 +47,14 @@ if (require.main === module) {
     }
     const templateFileToRead = path.join(process.cwd(), process.argv[2+argOffset]);
     const dictionaryFileToRead = path.join(process.cwd(), process.argv[1+argOffset]);
-    main({templateFileToRead,dictionaryFileToRead,startToken,endToken}).then(async (generator)=>{
+    interpolateFromFiles({templateFileToRead,dictionaryFileToRead,startToken,endToken}).then(async (generator)=>{
         for await(let result of generator()){
             console.log(result);
         }   
     })
+
 }
-export default main;
+if (require.main === module) {
+    interpolateFromCLI();
+}
+export default interpolate;

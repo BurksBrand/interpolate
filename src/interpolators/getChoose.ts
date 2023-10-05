@@ -1,5 +1,6 @@
 import {promises as fs} from 'fs';
 import * as path from 'path';
+import { InterpolatorPlugin, InterpolatorPluginResult } from 'typings';
 
 const delimiter = ":"
 const _choose = <T>(array: T[]): T | undefined => {
@@ -11,17 +12,19 @@ const _choose = <T>(array: T[]): T | undefined => {
       }
 
 const getChoose = ()=>{
-    const result = async function* interpolate(token:string) {
+    const result:InterpolatorPlugin = async function* interpolate(token:string):InterpolatorPluginResult {
         if(token.startsWith("choose:")){
             const pieces = token.slice(7).split(delimiter);
             if(pieces[0]==="file"){
                 const f  = pieces.slice(1).join(delimiter);
-                yield _choose(((await fs.readFile(path.join(process.cwd(),f), 'utf8'))).split("\r\n"));
-
+                const result = _choose(((await fs.readFile(path.join(process.cwd(),f), 'utf8'))).split("\r\n"));
+                if(result){
+                    yield result;
+                }
             } else {
                 const result = _choose(pieces.filter(x=>x))
                 if(result){
-                    yield result;
+                    yield result as string;
                 }
             }
         }

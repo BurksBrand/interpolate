@@ -1,4 +1,5 @@
-import main, { FileInterpolateOptions } from './main'; // Import the main function and related types
+import { FileInterpolateOptions } from 'typings';
+import {interpolate,interpolateFromFiles} from './main'; // Import the main function and related types
 import * as fs from 'fs';
 
 describe('main', () => {
@@ -12,10 +13,10 @@ describe('main', () => {
   }));
 
   const results =[
-    "redbob is 23",
-    "bluebob is 23",
-    "greenbob is 23",
-    "yellowbob is 23",
+    "red<bogus>bob is 23",
+    "blue<bogus>bob is 23",
+    "green<bogus>bob is 23",
+    "yellow<bogus>bob is 23",
     "bob is 23",
     "Foo bob is 23",
     "johnbob is 23",
@@ -49,14 +50,25 @@ describe('main', () => {
     //   .mockResolvedValueOnce('{"key": "value"}');
 
     // Act: Call the main function
-    const result:()=>AsyncGenerator<string> = await main(options);
+    const result:()=>AsyncGenerator<string> = await interpolateFromFiles(options);
     let i = 0;
+    let hasItems = false;
     for await(let line of result()){
-    // Assert: Check the result or any expectations
-    expect(line).toEqual(results[i]);
+        // Assert: Check the result or any expectations
+        expect(line).toEqual(results[i]);
         i+=1;
-    }
+        hasItems=true;
+    } 
+    expect(hasItems).toBeTruthy();
 
+  });
+  it('should successfully execute', async () => {
+    const result = await interpolate({});
+    let hasItems = false;
+    for await(let line of result()){
+      hasItems=true;
+    }
+    expect(hasItems).toBeFalsy();
   });
 
   it('should successfully execute main with template.choice.txt and dictionary', async () => {
@@ -67,9 +79,10 @@ describe('main', () => {
     };
 
     // Act: Call the main function
-    const result:()=>AsyncGenerator<string> = await main(options);
+    const result:()=>AsyncGenerator<string> = await interpolateFromFiles(options);
 
     let index = 0;
+    let hasItems = false;
     for await(let line of result()){
     // Assert: Check the result or any expectations
         if(index<1){
@@ -79,9 +92,10 @@ describe('main', () => {
         }else {
             expect(["cat","dog"]).toContain(line);
         }
-
+        hasItems=true;
         index+=1;
     }
+    expect(hasItems).toBeTruthy();
 
   });
   it('should successfully execute main with template.othersymbols.txt and dictionary', async () => {
@@ -94,31 +108,34 @@ describe('main', () => {
     };
 
     // Act: Call the main function
-    const result:()=>AsyncGenerator<string> = await main(options);
-
+    const result:()=>AsyncGenerator<string> = await interpolateFromFiles(options);
+    let hasItems = false;
     for await(let line of result()){
     // Assert: Check the result or any expectations
-        //console.log("line",line);
+        hasItems=true;
         expect(line).toEqual("<split:red:blue:green> dog");
     }
-
+    expect(hasItems).toBeTruthy();
   });
   it('should successfully execute main with template.noclosing.txt and dictionary', async () => {
     // Arrange: Set up the test input
     const options: FileInterpolateOptions = {
       templateFileToRead: './examples/template.noclosing.txt',
-      dictionaryFileToRead: './examples/dictionary.json',
-    //   startToken:"{",
-    //   endToken:"}"
+      dictionaryFileToRead: './examples/dictionary.json'
     };
 
     // Act: Call the main function
-    const result:()=>AsyncGenerator<string> = await main(options);
-
+    const result:()=>AsyncGenerator<string> = await interpolateFromFiles(options);
+    let hasItems = false;
+    let i = 0;
+    const results = ["<color dog","<color log <name>"]
     for await(let line of result()){
+      hasItems=true;
     // Assert: Check the result or any expectations
-        expect(line).toEqual("<color dog");
+        expect(line).toEqual(results[i]);
+        i+=1;
     }
+    expect(hasItems).toBeTruthy();
 
   });
 });

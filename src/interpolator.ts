@@ -16,12 +16,18 @@ async function* interpolate(template:string, interpolationFunction:(s:string)=>A
     result += template.slice(startIndex, openBracketIndex);
 
     const closeBracketIndex = template.indexOf(endToken, openBracketIndex);
-
+    const nextStartBracketIndex = template.indexOf(startToken,openBracketIndex+1);
     if (closeBracketIndex === -1) {
       // If there's no closing '>', treat the '<' as plain text
       result += startToken;
       startIndex = openBracketIndex + 1;
-    } else {
+    } 
+    // else if (nextStartBracketIndex>-1 && nextStartBracketIndex<closeBracketIndex /* Nested Tokens */){
+    //   startIndex = template.length;
+    //   yield "nested tokens not supported:"+template;
+    //   return;
+    // }
+     else {
       // Extract the content between '<' and '>', apply interpolation, and append to the result
       const content = template.slice(openBracketIndex + 1, closeBracketIndex);
       const rest = template.slice(closeBracketIndex+1);
@@ -40,7 +46,7 @@ async function* interpolate(template:string, interpolationFunction:(s:string)=>A
       if(!same){
       return;
       } else {
-        result += template.slice(openBracketIndex,closeBracketIndex-openBracketIndex+1);
+        result += startToken+content+endToken;
         startIndex=closeBracketIndex+1;
       }
     }

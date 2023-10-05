@@ -61,3 +61,53 @@ blue dog
 green dog
 <defaulthandlershouldfire>
 ```
+
+Usage Example:
+```js
+
+const {interpolateFromFiles, interpolate,getChoose,getSplit,getRange,getDefaultInterpolator} = require("@burksbrand/interpolate");
+
+// A custom plugin for year
+const customPlugin = ()=>{
+    return async function* (token) {
+        if(token==="customplugin"){
+            yield (new Date(Date.now())).getFullYear()
+        }    
+    }
+
+}
+
+
+const main = async function (){
+
+    const templateFileToRead = "./template.txt"
+    const dictionaryFileToRead = "./dictionary.json"
+
+    // Example 1 using no plugins and files
+    const foo = await interpolateFromFiles({templateFileToRead,dictionaryFileToRead,
+       plugins:[
+        ]
+    });
+    for await (let item of foo()){
+        console.log(item)
+    }
+    
+    // Example 2 using getSplit plugin and customPlugin
+    const foo2 = await interpolate({
+        dictionary:{
+            "toes":"this little piggy <customplugin><bogus>"
+        },
+        template:["tippy <toes>","<split:23:24:29><toes><bogus>"],
+        plugins:[
+           getSplit,
+           customPlugin
+            ]
+    })
+    for await (let item of foo2()){
+        console.log(item);
+    }
+}
+main();
+
+
+```
