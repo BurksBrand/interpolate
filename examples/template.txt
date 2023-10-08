@@ -5,4 +5,6 @@ Foo <name> is <age>
 <range:24:30> wizards
 <range:24:30:5> wizards
 <color> dog
+<split:file:head:3:tail:2:./examples/colors.txt>
+<split:file:tail:2:./examples/colors.txt>
 <defaulthandlershouldfire>

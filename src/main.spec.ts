@@ -34,6 +34,10 @@ describe('main', () => {
     "red dog",
     "blue dog",
     "green dog",
+    "blue",
+    "green",
+    "green",
+    "yellow",
     "<defaulthandlershouldfire>"
 ];
   // Example test case
@@ -89,15 +93,22 @@ describe('main', () => {
             expect(["red","blue","green","yellow"]).toContain(line);
         } else if( index<2){
             expect("<choose:>").toEqual(line);
-        }else {
-            expect(["cat","dog"]).toContain(line);
-        }
+        } else if( index<3){
+          expect(["cat","dog"]).toContain(line);
+        } else if (index<5) {
+          expect(["red","blue","green","yellow"]).toContain(line);
+        } else if(index<7) {
+          expect(["foo","bar","baz","bat"]).toContain(line);
+        } else {
+          expect("<choosemany:2:>").toEqual(line);
+        } 
         hasItems=true;
         index+=1;
     }
     expect(hasItems).toBeTruthy();
 
   });
+  
   it('should successfully execute main with template.othersymbols.txt and dictionary', async () => {
     // Arrange: Set up the test input
     const options: FileInterpolateOptions = {

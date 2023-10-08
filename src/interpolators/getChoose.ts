@@ -17,7 +17,7 @@ const getChoose = ()=>{
             const pieces = token.slice(7).split(delimiter);
             if(pieces[0]==="file"){
                 const f  = pieces.slice(1).join(delimiter);
-                const result = _choose(((await fs.readFile(path.join(process.cwd(),f), 'utf8'))).split("\r\n"));
+                const result = _choose(((await fs.readFile(path.join(process.cwd(),f), 'utf8'))).split(/\r?\n/));
                 if(result){
                     yield result;
                 }

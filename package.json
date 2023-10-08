@@ -1,6 +1,6 @@
 {
   "name": "@burksbrand/interpolate",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "a typescript node tool for interpolating a template array with a series of plugins",
   "main": "dist/main.js",
   "types": "dist/main.d.ts",

@@ -1,3 +1,6 @@
 <choose:file:./examples/colors.txt>
 <choose:>
 <choose:dog:cat>
+<choosemany:2:file:./examples/colors.txt>
+<choosemany:2:foo:bar:baz:bat>
+<choosemany:2:>
