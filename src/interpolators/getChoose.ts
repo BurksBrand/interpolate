@@ -1,5 +1,6 @@
 import {promises as fs} from 'fs';
 import * as path from 'path';
+import splitFileToken from '../splitFileToken';
 import { InterpolatorPlugin, InterpolatorPluginResult } from 'typings';
 
 const delimiter = ":"
@@ -17,7 +18,7 @@ const getChoose = ()=>{
             const pieces = token.slice(7).split(delimiter);
             if(pieces[0]==="file"){
                 const f  = pieces.slice(1).join(delimiter);
-                const result = _choose(((await fs.readFile(path.join(process.cwd(),f), 'utf8'))).split(/\r?\n/));
+                const result = _choose(((await fs.readFile(path.join(process.cwd(),f), 'utf8'))).split(splitFileToken));
                 if(result){
                     yield result;
                 }

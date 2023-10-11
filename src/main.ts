@@ -3,6 +3,7 @@ import * as path from 'path';
 import dynamicLoader from './dynamicLoader';
 import getInterpolate from './interpolate';
 import { FileInterpolateOptions, InterpolateOptions } from './typings';
+import splitFileToken from './splitFileToken';
 
 export {InterpolatorPlugin} from './typings';
 export {default as getChoose} from './interpolators/getChoose';
@@ -23,7 +24,7 @@ export const interpolateFromFiles = async ({templateFileToRead,dictionaryFileToR
     const pieces =await Promise.all([...[templateFileToRead,dictionaryFileToRead].map((fileName)=>fs.readFile(fileName, 'utf8')),...(await dynamicLoader(path.join(__dirname,"./interpolators/"),ext))]);
     let [template,dictionaryToParse,...plugins]:any = pieces;
     const dictionary = JSON.parse(dictionaryToParse);
-    return interpolate({dictionary,template:(template as string).split("\r\n"),plugins:plugins,startToken,endToken})
+    return interpolate({dictionary,template:(template as string).split(splitFileToken),plugins:plugins,startToken,endToken})
 
 }
 export const interpolate = async (options:InterpolateOptions):Promise<()=>AsyncGenerator<string>>=>{

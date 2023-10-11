@@ -1,0 +1,3 @@
+<foo> is foo
+<foo> is bar
+<choosemany:1:file:./examples/unixtest.splitfile.txt>

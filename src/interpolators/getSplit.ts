@@ -1,5 +1,6 @@
 import {promises as fs} from 'fs';
 import * as path from 'path';
+import splitFileToken from '../splitFileToken';
 import { InterpolatorPlugin } from 'typings';
 
 const delimiter = ":"
@@ -28,10 +29,13 @@ const getSplit = ()=>{
                 }
                 f=f.split(":").slice(sliceItem)[0]
                 let index = 0;
-                     for await (let line of (await fs.readFile(path.join(process.cwd(),f), 'utf8')).split(/\r?\n/)){
+                     for await (let line of (await fs.readFile(path.join(process.cwd(),f), 'utf8')).split(splitFileToken)){
            
                     if(index<startTake+head&&index>startTake){
-                        yield line;
+                        const result = line.trim();
+                        if(result){
+                            yield line.trim();
+                        }
                     }
                     index+=1;
                 }

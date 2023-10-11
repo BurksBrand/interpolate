@@ -102,11 +102,12 @@ describe('main', () => {
         } else {
           expect("<choosemany:2:>").toEqual(line);
         } 
+        //console.log(`${index} - ${line}`);
         hasItems=true;
         index+=1;
     }
     expect(hasItems).toBeTruthy();
-
+    expect(index).toBe(8);
   });
   
   it('should successfully execute main with template.othersymbols.txt and dictionary', async () => {

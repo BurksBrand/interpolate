@@ -1,5 +1,6 @@
 import {promises as fs} from 'fs';
 import * as path from 'path';
+import splitFileToken from '../splitFileToken';
 import { InterpolatorPlugin, InterpolatorPluginResult } from 'typings';
 
 const delimiter = ":"
@@ -14,7 +15,7 @@ function shuffleArray<T>(array:T[]):void {
 
 async function* _choosemany<T>(numberToChoose:number, array: T[]) {
         shuffleArray(array)
-        for(let item of array.slice(numberToChoose)){
+        for(let item of array.slice(0,numberToChoose)){
             yield item;
         }
       }
@@ -29,7 +30,7 @@ const getChooseMany = ()=>{
 
                 if(pieces[1]==="file"){
                     const f  = pieces[2];
-                    for await (let item of _choosemany<string>(countOfChoice,((await fs.readFile(path.join(process.cwd(),f), 'utf8'))).split(/\r?\n/))){
+                    for await (let item of _choosemany<string>(countOfChoice,((await fs.readFile(path.join(process.cwd(),f), 'utf8'))).split(splitFileToken).filter(x=>x))){
                         yield item;
                     }
                 } else {
