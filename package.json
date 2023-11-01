@@ -1,6 +1,6 @@
 {
   "name": "@burksbrand/interpolate",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "a typescript node tool for interpolating a template array with a series of plugins",
   "main": "dist/main.js",
   "types": "dist/main.d.ts",
@@ -13,7 +13,7 @@
   "license": "AGPL-3.0-or-later",
   "devDependencies": {
     "@types/jest": "^29.5.5",
-    "@types/node": "^20.8.0",
+    "@types/node": "^20.8.9",
     "jest": "^29.7.0",
     "ts-jest": "^29.1.1"
   },
@@ -28,8 +28,6 @@
   "directories": {
     "example": "examples"
   },
-  "dependencies": {
-   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/BurksBrand/interpolate.git"

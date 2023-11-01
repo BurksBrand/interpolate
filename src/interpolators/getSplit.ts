@@ -10,7 +10,7 @@ const getSplit = ()=>{
             const pieces = token.slice(6).split(delimiter);
             if(pieces[0]==="file"){
                 let f  = pieces.join(delimiter);
-                let head = f.length-1;
+                let head = -1;
                 let startTake = -1;
                 let sliceItem = 1;
                 if(pieces.length>2){
@@ -30,8 +30,7 @@ const getSplit = ()=>{
                 f=f.split(":").slice(sliceItem)[0]
                 let index = 0;
                      for await (let line of (await fs.readFile(path.join(process.cwd(),f), 'utf8')).split(splitFileToken)){
-           
-                    if(index<startTake+head&&index>startTake){
+                    if((startTake===-1 && head===-1) ||index<startTake+head&&index>startTake){
                         const result = line.trim();
                         if(result){
                             yield line.trim();
