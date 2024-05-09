@@ -1,0 +1,4 @@
+black
+white
+gold
+rgb(<range:1:255:100>,0,0)

@@ -2,10 +2,11 @@ import {promises as fs} from 'fs';
 import * as path from 'path';
 import splitFileToken from '../splitFileToken';
 import { InterpolatorPlugin } from 'typings';
+import current from '../current';
 
 const delimiter = ":"
 const getSplit = ()=>{
-    const result: InterpolatorPlugin = async function* interpolate(token:string) {
+    const result: InterpolatorPlugin = async function* interpolate(token:string, stack:string[]=[]) {
         if(token.startsWith("split:")){
             const pieces = token.slice(6).split(delimiter);
             if(pieces[0]==="file"){
@@ -33,13 +34,16 @@ const getSplit = ()=>{
                     if((startTake===-1 && head===-1) ||index<startTake+head&&index>startTake){
                         const result = line.trim();
                         if(result){
-                            yield line.trim();
+                            const l = line.trim();
+                            current[`${stack[stack.length-2]}.current`] = l;
+                            yield l;
                         }
                     }
                     index+=1;
                 }
             } else {
                 for (let newToken of token.slice(6).split(delimiter)){
+                    current[`${stack[stack.length-2]}.current`] = newToken;
                     yield newToken;
                 }
             }

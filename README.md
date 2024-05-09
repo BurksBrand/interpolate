@@ -183,3 +183,10 @@ yellow
 ```
 
 files are relative to execution
+
+Experimental:
+if a dictionary entry is mapped to an interpolator you may possibly access the current value with:
+
+```
+<dictionaryEntry> <dictionaryEntry.current>
+```

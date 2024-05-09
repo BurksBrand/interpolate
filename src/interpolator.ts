@@ -1,5 +1,12 @@
+import current from './current';
 
-async function* interpolate(template:string, interpolationFunction:(s:string)=>AsyncGenerator<string>, startToken:string,endToken:string):AsyncGenerator<string> {
+async function* interpolate(
+    template:string, 
+    interpolationFunction:(s:string, stack:string[])=>AsyncGenerator<string>, 
+    startToken:string,
+    endToken:string,
+    stack:string[]=[]
+  ):AsyncGenerator<string> {
 //  console.log("Entry to interpolate", template);
   let result = '';
   let startIndex = 0;
@@ -32,14 +39,18 @@ async function* interpolate(template:string, interpolationFunction:(s:string)=>A
       const content = template.slice(openBracketIndex + 1, closeBracketIndex);
       const rest = template.slice(closeBracketIndex+1);
       let same = false;
-      for await (let interpolated of interpolationFunction(content)){
+      for await (let interpolated of interpolationFunction(content,[...stack,content])){
         const fork = result + interpolated + rest;
+        //console.log(stack,"fork",fork);
         if(interpolated===startToken+content+endToken){
           same = true;
           break;
+        } else {
+          //console.log("-1-",stack,content, interpolated);
         }
-      let restInterpolated:any
-        for await (restInterpolated of interpolate(fork, interpolationFunction, startToken,endToken)){
+        let restInterpolated:any
+        for await (restInterpolated of interpolate(fork, interpolationFunction, startToken,endToken,[...stack,content])){
+          //console.log("-2-",stack,content, restInterpolated);
           yield restInterpolated;
         }
       }
@@ -51,6 +62,7 @@ async function* interpolate(template:string, interpolationFunction:(s:string)=>A
       }
     }
   }
+  //console.log("Final yield", stack, result);
   // Yield the final interpolated result if no matches
   yield result;
 }

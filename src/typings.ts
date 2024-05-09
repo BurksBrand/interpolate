@@ -9,12 +9,14 @@ export interface InterpolateOptions{
     template?:string[]
     plugins?:InterpolatorPlugin[],
     startToken?:string
-    endToken?:string
+    endToken?:string,
+    stack?:string[]
 }
 
 export interface FileInterpolateOptions {
     templateFileToRead: string,
     dictionaryFileToRead: string,
     startToken?: string,
-    endToken?: string
+    endToken?: string,
+    stack?:string[]
 }

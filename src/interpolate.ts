@@ -11,20 +11,21 @@ const getInterpolate = async ({
         template=[],
         plugins=[],
         startToken="<",
-        endToken=">"
+        endToken=">",
+        stack=[]
     }:InterpolateOptions):Promise<()=>AsyncGenerator<string, any, unknown>>=>{
     return async function* (){
         const handlers:any = [
-            getDictionaryInterpolator(dictionary),// if in dictionary return it
+            getDictionaryInterpolator(dictionary,stack),// if in dictionary return it
             ...plugins.map((x:any)=>x()),
-            getDefaultInterpolator(startToken,endToken) // if we don't have a handler return unmodified
+            getDefaultInterpolator(startToken,endToken,stack) // if we don't have a handler return unmodified
         ]
-        async function *fullInterpolate (token:string){
-            for await( let item of ( coalesceYielders<string>(handlers,[token]) )){
+        async function *fullInterpolate (token:string,stack:string[]=[]){
+            for await( let item of ( coalesceYielders<string>(handlers,[token,stack]) )){
                 yield item;
             }// token in dictionary ? dictionary[token] : handlers();
         }
-        for(let result of template.filter(x=>x).flatMap(async (line:string)=> await interpolator(line,fullInterpolate as any /* we have a default return so it is okay */,startToken,endToken))){
+        for(let result of template.filter(x=>x).flatMap(async (line:string)=> await interpolator(line,fullInterpolate as any /* we have a default return so it is okay */,startToken,endToken,stack))){
             const r = await result;
             for await (let result2 of r){
                 yield result2;

@@ -1,0 +1,2 @@
+pink
+choose many <choosemany:2:file:./examples/colors-2.txt>

@@ -1,0 +1,1 @@
+<color> <color.current> <color.current> <color> <color.current> <choose:file:./examples/colors-choice.txt> <color-choice> <color-choice.current>

@@ -1,5 +1,7 @@
 {
     "age":"23",
     "name":"bob",
-    "color":"<split:red:blue:green>"
+    "color":"<split:red:blue:green>",
+    "color-choice":"<choose:file:./examples/colors-choice.txt>",
+    "age-range-test":"<range:0:100:10>"
 }
